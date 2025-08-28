@@ -1,0 +1,32 @@
+server:
+  port: 4004
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: patient-service-route
+          uri: http://patient-service:4000
+          predicates:
+            - path=/api/patients/**
+          filters:
+            - strip-prefix=1
+
+          ## Rest Client -> http://localhost:4004/api/patients
+
+          ## API Gateway -> http://patient-service:4000/
+
+          ## Patient Service (Spring Boot App) -> /patients ->Patients Array
+
+        - id: api-docs-patient-route
+          uri: http://patient-service:4000
+          predicates:
+              - path=/api-docs/patients
+          filters:
+            - rewrite-path=/api-docs/patients/v3/api-docs
+
+          ## Rest-Client -> http://localhost:4004/api-docs/patients
+          ## Api-Gateway -> http://patient-service:4000/v3/api-docs
+          
+
+
